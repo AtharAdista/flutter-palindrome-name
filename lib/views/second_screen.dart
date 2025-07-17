@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_palindrome_name/view_models/user_viewmodel.dart';
 import 'package:flutter_palindrome_name/view_models/palindrome_viewmodel.dart';
-import 'package:flutter_palindrome_name/views/thrid_screen.dart';
+import 'package:flutter_palindrome_name/views/third_screen.dart';
 import 'package:provider/provider.dart';
 
 class SecondScreen extends StatelessWidget {
