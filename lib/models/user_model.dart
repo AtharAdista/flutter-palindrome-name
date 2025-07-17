@@ -20,5 +20,6 @@ class User {
     );
   }
 
+
   String get fullName => '$firstName $lastName';
 }
