@@ -59,6 +59,24 @@ class _ThirdScreenState extends State<ThirdScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          if (vm.errorMessage != null && vm.users.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Gagal memuat data"),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      vm.fetchUsers(refresh: true);
+                    },
+                    child: const Text("Coba Lagi"),
+                  ),
+                ],
+              ),
+            );
+          }
+
           if (vm.isEmpty && vm.users.isEmpty) {
             return const Center(child: Text("No users available."));
           }

@@ -10,6 +10,7 @@ class UserViewModel extends ChangeNotifier {
   bool hasMore = true;
   String selectedUserName = '';
   bool isEmpty = false;
+  String? errorMessage; 
 
   Future<void> fetchUsers({bool refresh = false}) async {
     if (isLoading) return;
@@ -19,33 +20,46 @@ class UserViewModel extends ChangeNotifier {
       users.clear();
       hasMore = true;
       isEmpty = false;
+      errorMessage = null;
     }
 
     isLoading = true;
     notifyListeners();
 
-    final response = await http.get(
-      Uri.parse('https://reqres.in/api/users?page=$page&per_page=10'),
-      headers: {
-        'x-api-key': 'reqres-free-v1',
-      },
-    );
+    try {
+      final response = await http.get(
+        Uri.parse('https://reqres.in/api/users?page=$page&per_page=10'),
+        headers: {
+          'x-api-key': 'reqres-free-v1',
+        },
+      );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final fetchedUsers = (data['data'] as List)
-          .map((json) => User.fromJson(json))
-          .toList();
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final fetchedUsers = (data['data'] as List)
+            .map((json) => User.fromJson(json))
+            .toList();
 
-      if (fetchedUsers.isEmpty) {
-        if (users.isEmpty) {
-          isEmpty = true; // hanya jika benar-benar dari awal kosong
+        if (fetchedUsers.isEmpty) {
+          if (users.isEmpty) {
+            isEmpty = true;
+          }
+          hasMore = false;
+        } else {
+          users.addAll(fetchedUsers);
+          page++;
         }
-        hasMore = false;
+
+        errorMessage = null; 
       } else {
-        users.addAll(fetchedUsers);
-        page++;
+        errorMessage = 'Gagal memuat data';
+        if (users.isEmpty) isEmpty = true;
+        hasMore = false;
       }
+    } catch (e) {
+      errorMessage = 'Gagal memuat data';
+      if (users.isEmpty) isEmpty = true;
+      hasMore = false;
     }
 
     isLoading = false;
