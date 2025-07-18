@@ -93,8 +93,8 @@ class _FirstScreenState extends State<FirstScreen> {
                                   ),
                                   content: Text(
                                     result
-                                        ? 'The sentence is a palindrome.'
-                                        : 'The sentence is not a palindrome.',
+                                        ? 'isPalindrome'
+                                        : 'not palindrome',
                                   ),
                                   actions: [
                                     TextButton(
